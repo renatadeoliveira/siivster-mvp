@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Siivster - Simple & Efficient Cleaning Routines</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              200: '#99f6e4',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+              900: '#134e4a',
+            },
+            accent: {
+              500: '#0284c7',
+              600: '#0369a1',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom Scrollbar for sleek mobile view */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .mobile-frame {
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 12px #1f2937;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-800 font-sans min-h-screen flex items-center justify-center p-0 md:p-6">
+
+  <!-- Main Container / Mobile App Wrapper -->
+  <div id="app-container" class="w-full max-w-md h-screen md:h-[844px] bg-slate-50 md:rounded-[40px] flex flex-col justify-between overflow-hidden relative transition-all duration-300 mobile-frame">
+
+    <!-- Top Status Bar (Mobile Preview) -->
+    <div class="px-6 pt-3 pb-2 flex justify-between items-center text-xs font-semibold text-slate-500 bg-white/80 backdrop-blur border-b border-slate-100 z-20">
+      <span id="current-time">09:41</span>
+      <div class="flex items-center space-x-2">
+        <i class="fa-solid fa-signal"></i>
+        <i class="fa-solid fa-wifi"></i>
+        <i class="fa-solid fa-battery-full text-brand-600"></i>
+      </div>
+    </div>
+
+    <!-- Main Dynamic Screen Content Area -->
+    <main id="screen-container" class="flex-1 overflow-y-auto no-scrollbar relative p-5">
+
+      <!-- SCREEN 1: HOME / WELCOME SCREEN -->
+      <section id="screen-home" class="screen-view h-full flex flex-col justify-between py-4">
+        <div class="flex flex-col items-center text-center mt-6">
+          <div class="w-20 h-20 bg-gradient-to-tr from-brand-500 to-accent-500 rounded-3xl flex items-center justify-center shadow-lg shadow-brand-500/30 mb-6 transform rotate-3">
+            <i class="fa-solid fa-sparkles text-white text-3xl"></i>
+          </div>
+          <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Siivster</h1>
+          <p class="text-brand-600 font-semibold text-sm tracking-wide mt-1 uppercase">Simple & Efficient Cleaning</p>
+          
+          <div class="mt-8 bg-white p-5 rounded-2xl shadow-sm border border-slate-100 space-y-4 text-left">
+            <div class="flex items-start space-x-3">
+              <div class="w-8 h-8 rounded-lg bg-brand-100 text-brand-700 flex items-center justify-center shrink-0 mt-0.5">
+                <i class="fa-solid fa-check-double text-sm"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-800 text-sm">Right Things</h4>
+                <p class="text-xs text-slate-500">Targeted, high-impact tasks designed specifically for your space.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-3">
+              <div class="w-8 h-8 rounded-lg bg-accent-500/10 text-accent-600 flex items-center justify-center shrink-0 mt-0.5">
+                <i class="fa-regular fa-clock text-sm"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-800 text-sm">Right Time</h4>
+                <p class="text-xs text-slate-500">Structured step-by-step routines with recommended frequencies.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-3">
+              <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
+                <i class="fa-solid fa-pump-soap text-sm"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-800 text-sm">Right Products</h4>
+                <p class="text-xs text-slate-500">Essential, non-toxic products paired with every cleaning task.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8">
+          <button onclick="navigateTo('screen-choose-space')" class="w-full py-4 bg-gradient-to-r from-brand-600 to-accent-500 hover:from-brand-700 hover:to-accent-600 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/25 flex items-center justify-center space-x-2 transition-all duration-200 active:scale-95">
+            <span>Get Started</span>
+            <i class="fa-solid fa-arrow-right text-sm"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- SCREEN 2: CHOOSE SPACE SCREEN -->
+      <section id="screen-choose-space" class="screen-view hidden h-full flex flex-col justify-between py-2">
+        <div>
+          <div class="mb-6">
+            <span class="text-xs font-bold text-brand-600 tracking-wider uppercase">Step 1 of 5</span>
+            <h2 class="text-2xl font-bold text-slate-900">Select Space</h2>
+            <p class="text-slate-500 text-sm">Choose the space you are responsible for cleaning today.</p>
+          </div>
+
+          <!-- Space Grid -->
+          <div class="grid grid-cols-1 gap-3" id="space-options-container">
+            <!-- Space items injected by JS -->
+          </div>
+        </div>
+
+        <div class="pt-4">
+          <button id="btn-next-space" onclick="confirmSpaceSelection()" disabled class="w-full py-4 bg-slate-300 text-slate-500 font-bold rounded-2xl shadow-md flex items-center justify-center space-x-2 transition-all duration-200 cursor-not-allowed">
+            <span>Next: View Routine</span>
+            <i class="fa-solid fa-arrow-right text-sm"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- SCREEN 3: CLEANING ROUTINE SCREEN -->
+      <section id="screen-routine" class="screen-view hidden h-full flex flex-col justify-between py-2">
+        <div class="flex-1 flex flex-col overflow-hidden">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <span class="text-xs font-bold text-brand-600 tracking-wider uppercase">Step 2 of 5</span>
+              <h2 id="routine-space-title" class="text-2xl font-bold text-slate-900">Kitchen Routine</h2>
+              <p class="text-slate-500 text-xs">Step-by-step tasks & efficient essentials.</p>
+            </div>
+            <span id="routine-time-est" class="bg-brand-50 text-brand-700 text-xs font-bold px-3 py-1.5 rounded-full border border-brand-200 flex items-center space-x-1">
+              <i class="fa-regular fa-clock"></i>
+              <span>~15 mins</span>
+            </span>
+          </div>
+
+          <!-- Routine Tasks List -->
+          <div class="flex-1 overflow-y-auto no-scrollbar space-y-3 pr-1" id="routine-tasks-container">
+            <!-- Routine tasks injected by JS -->
+          </div>
+        </div>
+
+        <div class="pt-4 bg-slate-50">
+          <button onclick="navigateTo('screen-feedback')" class="w-full py-4 bg-gradient-to-r from-brand-600 to-accent-500 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/25 flex items-center justify-center space-x-2 transition-all duration-200 active:scale-95">
+            <i class="fa-solid fa-circle-check text-base"></i>
+            <span>Complete Routine</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- SCREEN 4: COMPLETION FEEDBACK SCREEN -->
+      <section id="screen-feedback" class="screen-view hidden h-full flex flex-col justify-between py-2">
+        <div class="text-center flex flex-col items-center pt-4">
+          <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-4xl mb-4 animate-bounce">
+            <i class="fa-solid fa-circle-check"></i>
+          </div>
+          <span class="text-xs font-bold text-emerald-600 tracking-wider uppercase">Routine Completed!</span>
+          <h2 class="text-2xl font-extrabold text-slate-900 mt-1">Fantastic Job!</h2>
+          <p class="text-slate-500 text-xs px-4 mt-1">You maintained efficiency and kept your space in optimal condition.</p>
+
+          <!-- Feedback Summary Card -->
+          <div class="w-full bg-white rounded-2xl p-5 shadow-sm border border-slate-100 mt-6 space-y-4">
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider text-left">Cleaning Summary</h3>
+            
+            <div class="grid grid-cols-3 gap-2 text-center">
+              <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                <span class="block text-slate-400 text-[10px] font-bold uppercase">Time Saved</span>
+                <span id="summary-time" class="text-lg font-extrabold text-brand-600">8 mins</span>
+              </div>
+              <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                <span class="block text-slate-400 text-[10px] font-bold uppercase">Tasks done</span>
+                <span id="summary-tasks" class="text-lg font-extrabold text-slate-800">4 / 4</span>
+              </div>
+              <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                <span class="block text-slate-400 text-[10px] font-bold uppercase">Efficiency</span>
+                <span class="text-lg font-extrabold text-emerald-600">98%</span>
+              </div>
+            </div>
+
+            <div class="bg-emerald-50/60 border border-emerald-100 rounded-xl p-3 flex items-center space-x-3 text-left">
+              <i class="fa-solid fa-leaf text-emerald-600 text-lg"></i>
+              <p class="text-xs text-emerald-900 font-medium">Eco Impact: Saved ~1.2 liters of water by using microfiber pre-dampening.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-4">
+          <button onclick="navigateTo('screen-progression')" class="w-full py-4 bg-gradient-to-r from-brand-600 to-accent-500 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/25 flex items-center justify-center space-x-2 transition-all duration-200 active:scale-95">
+            <span>View Progress</span>
+            <i class="fa-solid fa-chart-line text-sm"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- SCREEN 5: PROGRESSION SCREEN -->
+      <section id="screen-progression" class="screen-view hidden h-full flex flex-col justify-between py-2">
+        <div>
+          <div class="mb-5">
+            <span class="text-xs font-bold text-brand-600 tracking-wider uppercase">Step 4 of 5</span>
+            <h2 class="text-2xl font-bold text-slate-900">Your Progression</h2>
+            <p class="text-slate-500 text-xs">Consistent habits leading to a clean, stress-free home.</p>
+          </div>
+
+          <!-- Streak & Milestones Banner -->
+          <div class="bg-gradient-to-r from-brand-600 to-accent-600 rounded-2xl p-5 text-white shadow-md mb-4">
+            <div class="flex justify-between items-center">
+              <div>
+                <span class="text-xs font-semibold uppercase tracking-wider opacity-80">Current Streak</span>
+                <div class="text-3xl font-extrabold flex items-center space-x-2 mt-0.5">
+                  <span>5 Days</span>
+                  <i class="fa-solid fa-fire text-amber-300 text-2xl"></i>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-xs font-semibold uppercase tracking-wider opacity-80">Total Routines</span>
+                <div class="text-2xl font-extrabold mt-0.5">18 Done</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Space Consistency Breakdown -->
+          <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 space-y-3 mb-4">
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Routine Consistency</h3>
+            
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1">
+                <span class="text-slate-700">Kitchen</span>
+                <span class="text-brand-600">85% Clean</span>
+              </div>
+              <div class="w-full bg-slate-100 rounded-full h-2">
+                <div class="bg-brand-500 h-2 rounded-full" style="width: 85%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1">
+                <span class="text-slate-700">Bathroom</span>
+                <span class="text-brand-600">90% Clean</span>
+              </div>
+              <div class="w-full bg-slate-100 rounded-full h-2">
+                <div class="bg-brand-500 h-2 rounded-full" style="width: 90%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1">
+                <span class="text-slate-700">Living Room</span>
+                <span class="text-slate-500">60% Clean</span>
+              </div>
+              <div class="w-full bg-slate-100 rounded-full h-2">
+                <div class="bg-accent-500 h-2 rounded-full" style="width: 60%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <button onclick="navigateTo('screen-tips')" class="w-full py-4 bg-gradient-to-r from-brand-600 to-accent-500 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/25 flex items-center justify-center space-x-2 transition-all duration-200 active:scale-95">
+            <span>Explore Cleaning Tips</span>
+            <i class="fa-solid fa-lightbulb text-sm"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- SCREEN 6: CLEANING TIPS SCREEN -->
+      <section id="screen-tips" class="screen-view hidden h-full flex flex-col justify-between py-2">
+        <div class="flex-1 flex flex-col overflow-hidden">
+          <div class="mb-4">
+            <span class="text-xs font-bold text-brand-600 tracking-wider uppercase">Step 5 of 5</span>
+            <h2 class="text-2xl font-bold text-slate-900">Efficiency Tips</h2>
+            <p class="text-slate-500 text-xs">Expert advice on products, timing & smart techniques.</p>
+          </div>
+
+          <!-- Tips Scroll Container -->
+          <div class="flex-1 overflow-y-auto no-scrollbar space-y-3 pr-1">
+            
+            <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex space-x-3">
+              <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-800 text-sm">The Top-to-Bottom Rule</h4>
+                <p class="text-xs text-slate-500 mt-0.5">Always dust high surfaces first before vacuuming or wiping floors so falling debris gets picked up later.</p>
+              </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex space-x-3">
+              <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-pump-soap"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-800 text-sm">Dwell Time Matters</h4>
+                <p class="text-xs text-slate-500 mt-0.5">Spray cleaners and let them sit for 3–5 minutes before wiping. Let the product do the heavy lifting for you!</p>
+              </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex space-x-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-box-tissue"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-800 text-sm">Color-Coded Cloths</h4>
+                <p class="text-xs text-slate-500 mt-0.5">Use blue for glass, yellow for bathroom, green for kitchen. Prevents cross-contamination and boosts speed.</p>
+              </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex space-x-3">
+              <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-spray-can-sparkles"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-800 text-sm">Microfiber Magic</h4>
+                <p class="text-xs text-slate-500 mt-0.5">Damp microfiber picks up 99% of bacteria with just water. Reduce reliance on harsh chemical cleaners.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="pt-4 bg-slate-50">
+          <button onclick="navigateTo('screen-home')" class="w-full py-4 bg-slate-900 text-white font-bold rounded-2xl shadow-lg flex items-center justify-center space-x-2 transition-all duration-200 active:scale-95">
+            <i class="fa-solid fa-house text-sm"></i>
+            <span>Return to Home</span>
+          </button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Indicator / Navigation Dock -->
+    <div class="p-3 bg-white border-t border-slate-100 flex items-center justify-around z-20">
+      <button onclick="navigateTo('screen-home')" class="nav-btn text-brand-600 flex flex-col items-center space-y-0.5" id="nav-home">
+        <i class="fa-solid fa-house text-lg"></i>
+        <span class="text-[10px] font-bold">Home</span>
+      </button>
+      <button onclick="navigateTo('screen-choose-space')" class="nav-btn text-slate-400 hover:text-slate-600 flex flex-col items-center space-y-0.5" id="nav-space">
+        <i class="fa-solid fa-layer-group text-lg"></i>
+        <span class="text-[10px] font-bold">Space</span>
+      </button>
+      <button onclick="navigateTo('screen-routine')" class="nav-btn text-slate-400 hover:text-slate-600 flex flex-col items-center space-y-0.5" id="nav-routine">
+        <i class="fa-solid fa-list-check text-lg"></i>
+        <span class="text-[10px] font-bold">Routine</span>
+      </button>
+      <button onclick="navigateTo('screen-progression')" class="nav-btn text-slate-400 hover:text-slate-600 flex flex-col items-center space-y-0.5" id="nav-progression">
+        <i class="fa-solid fa-chart-line text-lg"></i>
+        <span class="text-[10px] font-bold">Progress</span>
+      </button>
+      <button onclick="navigateTo('screen-tips')" class="nav-btn text-slate-400 hover:text-slate-600 flex flex-col items-center space-y-0.5" id="nav-tips">
+        <i class="fa-solid fa-lightbulb text-lg"></i>
+        <span class="text-[10px] font-bold">Tips</span>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- JavaScript Logic -->
+  <script>
+    // App State
+    let selectedSpace = null;
+    let routineData = {
+      'Kitchen': {
+        time: '~15 mins',
+        tasks: [
+          { title: 'Wipe down counters & stove', timing: 'Daily', product: 'All-Purpose Surface Cleaner & Microfiber', completed: false },
+          { title: 'Sanitize sink basin', timing: 'Daily', product: 'Mild Scrub Cleanser', completed: false },
+          { title: 'Sweep & damp-mop floor', timing: '2x / Week', product: 'pH-Neutral Floor Cleaner', completed: false },
+          { title: 'Wipe exterior appliances', timing: 'Weekly', product: 'Glass & Stainless Cleaner', completed: false }
+        ]
+      },
+      'Bathroom': {
+        time: '~20 mins',
+        tasks: [
+          { title: 'Apply bowl cleaner & scrub toilet', timing: 'Weekly', product: 'Disinfectant Toilet Gel', completed: false },
+          { title: 'Spray and wipe mirror & vanity', timing: '3x / Week', product: 'Glass Cleaner & Lint-Free Cloth', completed: false },
+          { title: 'Scrub shower walls & tub', timing: 'Weekly', product: 'Soap Scum Remover & Non-scratch sponge', completed: false },
+          { title: 'Mop tiled floors', timing: 'Weekly', product: 'Disinfectant Floor Spray', completed: false }
+        ]
+      },
+      'Living Room': {
+        time: '~12 mins',
+        tasks: [
+          { title: 'Dust high surfaces & TV stand', timing: 'Weekly', product: 'Static Dust Wand or Microfiber', completed: false },
+          { title: 'Fluff cushions & tidy throws', timing: 'Daily', product: 'Fabric Refresh Spray (Optional)', completed: false },
+          { title: 'Vacuum rug & floor', timing: '2x / Week', product: 'HEPA Vacuum', completed: false }
+        ]
+      },
+      'Office': {
+        time: '~10 mins',
+        tasks: [
+          { title: 'Wipe desk, keyboard & mouse', timing: 'Daily', product: 'Electronics-Safe Wipes', completed: false },
+          { title: 'Empty waste bin', timing: '2x / Week', product: 'Recycling Bag', completed: false },
+          { title: 'Vacuum floor area', timing: 'Weekly', product: 'Vacuum Cleaner', completed: false }
+        ]
+      },
+      'Bedroom': {
+        time: '~15 mins',
+        tasks: [
+          { title: 'Make bed & straighten pillows', timing: 'Daily', product: 'None', completed: false },
+          { title: 'Dust nightstands & lamps', timing: 'Weekly', product: 'Microfiber Duster', completed: false },
+          { title: 'Vacuum or sweep flooring', timing: 'Weekly', product: 'Vacuum / Hardwood Cleaner', completed: false }
+        ]
+      }
+    };
+
+    const spacesList = [
+      { id: 'Kitchen', icon: 'fa-utensils', color: 'bg-amber-500' },
+      { id: 'Bathroom', icon: 'fa-bath', color: 'bg-blue-500' },
+      { id: 'Living Room', icon: 'fa-couch', color: 'bg-teal-500' },
+      { id: 'Office', icon: 'fa-laptop-house', color: 'bg-indigo-500' },
+      { id: 'Bedroom', icon: 'fa-bed', color: 'bg-purple-500' }
+    ];
+
+    // Navigation Handler adhering strictly to specified workflow
+    function navigateTo(screenId) {
+      // Hide all screens
+      const screens = document.querySelectorAll('.screen-view');
+      screens.forEach(s => s.classList.add('hidden'));
+
+      // Show targeted screen
+      const targetScreen = document.getElementById(screenId);
+      if (targetScreen) {
+        targetScreen.classList.remove('hidden');
+      }
+
+      // Update Navigation styling
+      updateNavHighlight(screenId);
+    }
+
+    function updateNavHighlight(screenId) {
+      const navMap = {
+        'screen-home': 'nav-home',
+        'screen-choose-space': 'nav-space',
+        'screen-routine': 'nav-routine',
+        'screen-feedback': 'nav-routine',
+        'screen-progression': 'nav-progression',
+        'screen-tips': 'nav-tips'
+      };
+
+      const activeNavId = navMap[screenId];
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('text-brand-600');
+        btn.classList.add('text-slate-400');
+      });
+
+      if (activeNavId) {
+        const activeBtn = document.getElementById(activeNavId);
+        if (activeBtn) {
+          activeBtn.classList.remove('text-slate-400');
+          activeBtn.classList.add('text-brand-600');
+        }
+      }
+    }
+
+    // Render Spaces
+    function renderSpaces() {
+      const container = document.getElementById('space-options-container');
+      container.innerHTML = '';
+
+      spacesList.forEach(space => {
+        const isSelected = selectedSpace === space.id;
+        const card = document.createElement('div');
+        card.className = `p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-center justify-between ${
+          isSelected 
+            ? 'border-brand-500 bg-brand-50/50 shadow-sm' 
+            : 'border-slate-100 bg-white hover:border-slate-200'
+        }`;
+        
+        card.onclick = () => selectSpace(space.id);
+
+        card.innerHTML = `
+          <div class="flex items-center space-x-3">
+            <div class="w-11 h-11 rounded-xl ${space.color} text-white flex items-center justify-center text-lg shadow-sm">
+              <i class="fa-solid ${space.icon}"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-800 text-sm">${space.id}</h3>
+              <p class="text-xs text-slate-400">${routineData[space.id].tasks.length} optimized tasks</p>
+            </div>
+          </div>
+          <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+            isSelected ? 'border-brand-500 bg-brand-500 text-white' : 'border-slate-300'
+          }">
+            ${isSelected ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function selectSpace(spaceId) {
+      selectedSpace = spaceId;
+      renderSpaces();
+
+      const nextBtn = document.getElementById('btn-next-space');
+      nextBtn.disabled = false;
+      nextBtn.className = "w-full py-4 bg-gradient-to-r from-brand-600 to-accent-500 text-white font-bold rounded-2xl shadow-lg shadow-brand-500/25 flex items-center justify-center space-x-2 transition-all duration-200 active:scale-95 cursor-pointer";
+    }
+
+    function confirmSpaceSelection() {
+      if (!selectedSpace) return;
+      loadRoutineForSpace(selectedSpace);
+      navigateTo('screen-routine');
+    }
+
+    // Load Routine Screen Data
+    function loadRoutineForSpace(spaceId) {
+      const spaceInfo = routineData[spaceId];
+      document.getElementById('routine-space-title').innerText = `${spaceId} Routine`;
+      document.getElementById('routine-time-est').innerHTML = `<i class="fa-regular fa-clock"></i> <span>${spaceInfo.time}</span>`;
+
+      const tasksContainer = document.getElementById('routine-tasks-container');
+      tasksContainer.innerHTML = '';
+
+      spaceInfo.tasks.forEach((task, index) => {
+        const taskCard = document.createElement('div');
+        taskCard.className = `p-4 rounded-2xl border transition-all ${
+          task.completed ? 'bg-slate-100 border-slate-200 opacity-75' : 'bg-white border-slate-100 shadow-sm'
+        }`;
+
+        taskCard.innerHTML = `
+          <div class="flex items-start justify-between space-x-2">
+            <div class="flex items-start space-x-3">
+              <button onclick="toggleTask('${spaceId}', ${index})" class="mt-0.5 w-6 h-6 rounded-lg border-2 flex items-center justify-center shrink-0 transition-colors ${
+                task.completed ? 'bg-brand-600 border-brand-600 text-white' : 'border-slate-300 bg-white'
+              }">
+                ${task.completed ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
+              </button>
+              <div>
+                <h4 class="font-bold text-slate-800 text-sm ${task.completed ? 'line-through text-slate-500' : ''}">${task.title}</h4>
+                <div class="flex flex-wrap gap-1.5 mt-2">
+                  <span class="bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-0.5 rounded-md flex items-center space-x-1">
+                    <i class="fa-solid fa-repeat text-[9px]"></i>
+                    <span>${task.timing}</span>
+                  </span>
+                  <span class="bg-brand-50 text-brand-700 text-[10px] font-bold px-2 py-0.5 rounded-md flex items-center space-x-1 border border-brand-100">
+                    <i class="fa-solid fa-spray-can text-[9px]"></i>
+                    <span>${task.product}</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        tasksContainer.appendChild(taskCard);
+      });
+
+      // Update feedback summary counts
+      const completedCount = spaceInfo.tasks.filter(t => t.completed).length;
+      document.getElementById('summary-tasks').innerText = `${completedCount} / ${spaceInfo.tasks.length}`;
+    }
+
+    function toggleTask(spaceId, taskIndex) {
+      routineData[spaceId].tasks[taskIndex].completed = !routineData[spaceId].tasks[taskIndex].completed;
+      loadRoutineForSpace(spaceId);
+    }
+
+    // Real-time status bar clock
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('current-time').innerText = `${hours}:${minutes}`;
+    }
+
+    // Initializer
+    window.onload = function() {
+      renderSpaces();
+      updateClock();
+      setInterval(updateClock, 10000);
+    };
+  </script>
+</body>
+</html>
